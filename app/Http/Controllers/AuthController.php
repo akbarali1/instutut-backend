@@ -7,8 +7,10 @@ use App\Services\Admin\AdminService;
 use App\Services\Authorization\AuthNormalService;
 use App\Services\GetUserService;
 use App\ViewModels\JsonReturnViewModel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Created by PhpStorm.
@@ -55,15 +57,21 @@ class AuthController extends Controller
     /**
      * Login user and return a token
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'device_name' => 'required',
+        ]);
+        $user = User::query()->where('email', $request->email)->first();
 
-        if (!$token = auth('api')->attempt($credentials)) {
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return JsonReturnViewModel::toJsonBeautify(['error' => 'Avtorizatsiya amalga oshirilmadi']);
         }
 
-        return AuthNormalService::respondWithToken($token, 'Oddiy login parol');
+        return AuthNormalService::respondWithToken($user, $request->device_name);
     }
 
     /**

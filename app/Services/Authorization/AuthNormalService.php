@@ -26,25 +26,17 @@ use kornrunner\Keccak;
 class AuthNormalService
 {
 
-    public static function respondWithToken($token, $typeAuth = false): JsonResponse
+    public static function respondWithToken($user, $device_name = false): JsonResponse
     {
-        $user        = \JWTAuth::setToken($token)->toUser();
         $telegram_id = $user->telegram_id ?? false;
         $userAgent   = request()->userAgent();
         $userIp      = request()->ip();
-        $auth        = AuthTokenModel::query()->create([
-            'user_id'    => $user->id,
-            'token'      => $token,
-            'ip'         => $userIp,
-            'user_agent' => $userAgent,
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
 
-        if ($auth && isset($telegram_id) && (new TelegramService)->sendingCheck($telegram_id)) {
+        if (isset($telegram_id) && (new TelegramService)->sendingCheck($telegram_id)) {
             $message = "Sizning akkauntingizga kirishdi.\n";
             $message .= '<u>Soat:</u> <b>'.date('d.m.Y H:i:s')."</b>\n";
-            if ($typeAuth) {
-                $message .= '<u>Avtorizatsiya turi:</u> <b>'.$typeAuth."</b>\n";
+            if ($device_name) {
+                $message .= '<u>Avtorizatsiya turi:</u> <b>'.$device_name."</b>\n";
             }
             $message .= '<u>IP Addres:</u> <b>'.$userIp."</b>\n";
             $message .= '<u>User Agent:</u> <b>'.$userAgent."</b>\n";
@@ -56,7 +48,7 @@ class AuthNormalService
                             'callback_data' => json_encode(
                                 [
                                     'loginBlock' => true,
-                                    'authId'     => $auth->id,
+                                    'authId'     => 11,
                                 ]
                             ),
                         ],
@@ -65,12 +57,13 @@ class AuthNormalService
             ]);
             (new TelegramService())->pinChatMessage($res, $telegram_id);
         }
+        $token = $user->createToken($device_name)->plainTextToken;
 
         return JsonReturnViewModel::toJsonBeautify([
             'status'       => 'success',
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'expires_in'   => auth('api')->factory()->getTTL() * 60,
+            'expires_in'   => 60,
         ])->header('Authorization', $token);
     }
 }
