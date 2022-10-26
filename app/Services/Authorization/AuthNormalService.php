@@ -31,6 +31,7 @@ class AuthNormalService
         $telegram_id = $user->telegram_id ?? false;
         $userAgent   = request()->userAgent();
         $userIp      = request()->ip();
+        $token       = $user->createToken($device_name);
 
         if (isset($telegram_id) && (new TelegramService)->sendingCheck($telegram_id)) {
             $message = "Sizning akkauntingizga kirishdi.\n";
@@ -48,7 +49,7 @@ class AuthNormalService
                             'callback_data' => json_encode(
                                 [
                                     'loginBlock' => true,
-                                    'authId'     => 11,
+                                    'authId'     => $token,
                                 ]
                             ),
                         ],
@@ -57,13 +58,12 @@ class AuthNormalService
             ]);
             (new TelegramService())->pinChatMessage($res, $telegram_id);
         }
-        $token = $user->createToken($device_name)->plainTextToken;
 
         return JsonReturnViewModel::toJsonBeautify([
             'status'       => 'success',
-            'access_token' => $token,
+            'access_token' => $token->plainTextToken,
             'token_type'   => 'bearer',
             'expires_in'   => 60,
-        ])->header('Authorization', $token);
+        ])->header('Authorization', $token->plainTextToken);
     }
 }
