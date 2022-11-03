@@ -3,6 +3,7 @@
 namespace App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Created by PhpStorm.
@@ -26,10 +27,13 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name'     => 'required|min:3',
-            'year'     => 'required|integer|min:1960|max:'.(date('Y')),
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:3|confirmed',
             'ref_id'   => 'nullable|exists:users,id',
+            'type'     => [
+                'required',
+                Rule::in(['student', 'teacher']),
+            ],
         ];
     }
 

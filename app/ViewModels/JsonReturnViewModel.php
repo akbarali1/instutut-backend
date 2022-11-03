@@ -23,9 +23,9 @@ class JsonReturnViewModel
                 'Content-Type' => 'application/json',
                 'Charset'      => 'UTF-8',
             ],
-            //JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-            //Siqilgan holatda jo`natiladigan qilindi
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        //Siqilgan holatda jo`natiladigan qilindi
+        // JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
     }
 }

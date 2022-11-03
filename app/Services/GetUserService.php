@@ -38,9 +38,9 @@ class GetUserService
     {
         $user      = auth()->user();
         $user_id   = $user->id;
-        $stars_all = QuestionService::getUserStar($user_id, $user->status_id, true);
-        $stars     = $stars_all['stars'];
-        $stars_pro = $stars_all['pro'];
+//        $stars_all = QuestionService::getUserStar($user_id, $user->status_id, true);
+//        $stars     = $stars_all['stars'];
+//        $stars_pro = $stars_all['pro'];
 
         return [
             'id'              => $user->id,
@@ -48,22 +48,18 @@ class GetUserService
             'email'           => $user->email,
             'phone'           => $user->phone,
             'name'            => $user->name,
-            'webmoney'        => $user->webmoney,
-            'qiwi'            => $user->qiwi,
             'intro'           => $user->intro,
-            'date_of_birth'   => ($user->dateo_of_birth !== null) ? $user->dateo_of_birth : ['oy' => '', 'yil' => '', 'sana' => ''],
-            'last_name'       => ($user->last_name != null) ? $user->last_name : '',
-            'ota'             => ($user->otasi != null) ? $user->otasi : '',
+            'last_name'       => $user->last_name ?? '',
+            'ota'             => $user->otasi ?? '',
             'rights'          => $user->rights,
             'money'           => number_format($user->money, '2', '.', ''),
             'rating'          => number_format($user->rating, '2', '.', ''),
             'status_id'       => $user->status_id,
             'status_name'     => $user->status_name,
             'purchased_error' => $user->purchased_error,
-            'stars_pro'       => $stars_pro,
+//            'stars_pro'       => $stars_pro,
             'status_image'    => url('/').'/assets/images/'.$user->status_id.'.png',
-            'stars'           => ($stars > 0) ? $stars : 0,
-            'eth_address'     => !is_null($user->eth_address),
+//            'stars'           => ($stars > 0) ? $stars : 0,
             'telegram'        => !is_null($user->telegram_id),
         ];
     }

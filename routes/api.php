@@ -27,8 +27,8 @@ Route::prefix('v1')->group(function () {
         Route::get('refresh', 'refresh');
         Route::get('user/username/{id}', 'getUserName');
         Route::post('logout', 'logout');
-        //        Route::get('tetsuchun', 'tetsuchun');
-        Route::get('user', 'user')->middleware('auth:api');
+        //Route::get('tetsuchun', 'tetsuchun');
+        Route::get('user', 'user')->middleware('auth:sanctum');
 
         //        Route::controller(Web3LoginController::class)->prefix('web3')->group(function () {
         //            Route::view('/', 'web3');

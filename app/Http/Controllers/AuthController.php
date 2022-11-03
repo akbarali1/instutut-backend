@@ -43,7 +43,7 @@ class AuthController extends Controller
         $data = $request->validated();
         $user = User::query()->create([
             'name'       => $data['name'],
-            'year'       => $data['year'],
+            'year'       => 0,
             'email'      => $data['email'],
             'id_unquine' => AdminService::generateRandomString(),
             'intro'      => AdminService::intoArray(),
@@ -60,8 +60,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email'       => 'required|email',
+            'password'    => 'required',
             'device_name' => 'required',
         ]);
         $user = User::query()->where('email', $request->email)->first();
@@ -92,6 +92,7 @@ class AuthController extends Controller
      */
     public function user()
     {
+
         $data          = $this->service->index();
         $data['title'] = trans('all.home');
         $data['g']     = 1;
