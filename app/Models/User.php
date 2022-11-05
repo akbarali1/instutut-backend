@@ -12,6 +12,12 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const USER_STATUS       = 1;
+    public const STUDENT_STATUS    = 2;
+    public const TEACHER_STATUS    = 3;
+    public const ADMIN_STATUS      = 4;
+    public const SUPERVISOR_STATUS = 9;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,7 +27,7 @@ class User extends Authenticatable
         'id',
         'ref_id',
         'ref_bonus',
-        'id_unquine',
+        'id_unique',
         'eth_address',
         'username',
         'ban',
@@ -37,10 +43,7 @@ class User extends Authenticatable
         'question',
         'rating',
         'phone',
-        'webmoney',
-        'qiwi',
         'intro',
-        'dateo_of_birth',
         'status_id',
         'status_name',
         'purchased_error',
@@ -64,7 +67,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'dateo_of_birth'    => 'array',
         'intro'             => 'array',
     ];
 

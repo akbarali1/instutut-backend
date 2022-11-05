@@ -37,10 +37,6 @@ class GetUserService
     public function index()
     {
         $user      = auth()->user();
-        $user_id   = $user->id;
-//        $stars_all = QuestionService::getUserStar($user_id, $user->status_id, true);
-//        $stars     = $stars_all['stars'];
-//        $stars_pro = $stars_all['pro'];
 
         return [
             'id'              => $user->id,
@@ -56,10 +52,7 @@ class GetUserService
             'rating'          => number_format($user->rating, '2', '.', ''),
             'status_id'       => $user->status_id,
             'status_name'     => $user->status_name,
-            'purchased_error' => $user->purchased_error,
-//            'stars_pro'       => $stars_pro,
             'status_image'    => url('/').'/assets/images/'.$user->status_id.'.png',
-//            'stars'           => ($stars > 0) ? $stars : 0,
             'telegram'        => !is_null($user->telegram_id),
         ];
     }

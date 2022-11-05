@@ -40,18 +40,24 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $data = $request->validated();
-        $user = User::query()->create([
-            'name'       => $data['name'],
-            'year'       => 0,
-            'email'      => $data['email'],
-            'id_unquine' => AdminService::generateRandomString(),
-            'intro'      => AdminService::intoArray(),
-            'password'   => bcrypt($data['password']),
-            'ref_id'     => $data['ref_id'] ?? null,
+        $data   = $request->validated();
+        $rights = $data['type'] === 'student' ? User::STUDENT_STATUS : User::TEACHER_STATUS;
+        $user   = User::query()->create([
+            'name'      => $data['name'],
+            'year'      => 0,
+            'email'     => $data['email'],
+            'id_unique' => AdminService::generateRandomString(),
+            'intro'     => AdminService::intoArray(),
+            'password'  => bcrypt($data['password']),
+            'ref_id'    => $data['ref_id'] ?? null,
+            'rights'    => $rights,
         ]);
 
-        return JsonReturnViewModel::toJsonBeautify(['status' => 'success', 'message' => 'User created successfully', 'data' => $user]);
+        return JsonReturnViewModel::toJsonBeautify([
+            'status'  => 'success',
+            'message' => 'User created successfully',
+            'data'    => $user,
+        ]);
     }
 
     /**
@@ -133,50 +139,5 @@ class AuthController extends Controller
             'name'    => $user->name,
         ]);
     }
-    //
-    //    public function phpVersion()
-    //    {
-    //        $php_version = 'PHP version: '.phpversion();
-    //        dd($php_version);
-    //    }
-
-    //    public function tetsuchun()
-    //    {
-    //        $not_table_name = 'championship_sessions';
-    //        $user_id        = 1;
-    //        $status_id      = 1;
-    //
-    //
-    //        $sql = 'select `id`, `question`, `answer`,`money`, `time`, `rating`, `file`, `type` from `question` where `status_id` = '.$status_id.' and `deleted_at` is null and `id` not in ( select `question_id` from `'.$not_table_name.'` where `user_id` = '.$user_id.' and `status` = "1" and `deleted_at` is null ) order by RAND() limit 1';
-    //
-    //        $question = DB::select($sql);
-    //        dd($sql, $question);
-    //        if (!$question) {
-    //            return AdminService::returnError('No questions');
-    //        }
-    //        $question       = $question[0];
-    //        $question->file = AdminService::getFile($question->file, $question->id, $question->type);
-    //
-    //        dd($question);
-    //
-    //
-    //        //$req  = $db->query('');
-    //        //
-    //        //        $question = Question::query()->where('status', 1)
-    //        //            //                    ->where('status_id', $status_id)
-    //        //            //->where('type', '=', '1')
-    //        //            //            ->where('type', '=', '3')
-    //        //            ->whereNotIn('id', function ($query) use ($user_id, $not_table_name) {
-    //        //                $query->select('question_id')
-    //        //                    ->where('user_id', $user_id)
-    //        //                    ->where('status', 1)
-    //        //                    ->whereNull('deleted_at')
-    //        //                    ->from($not_table_name);
-    //        //            })
-    //        //            ->inRandomOrder()
-    //        //            ->select(['id', 'question', 'answer', 'time', 'money', 'rating', 'file', 'type'])->first();
-    //
-    //        dd($question);
-    //    }
 
 }
