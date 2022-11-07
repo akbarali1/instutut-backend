@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Auth;
 /**
  * Created by PhpStorm.
  * Filename: GetUserService.php
- * Project Name: questa-backend.loc
+ * Project Name: instutut-backend
  * Author: Акбарали
- * Date: 02/08/2022
- * Time: 6:59 PM
+ * Date: 07/11/2022
+ * Time: 5:49 PM
  * Github: https://github.com/akbarali1
  * Telegram: @akbar_aka
  * E-mail: me@akbarali.uz
